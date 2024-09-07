@@ -14,6 +14,7 @@ load_dotenv()
 
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+EMAIL_BCC_USER = os.environ.get("EMAIL_BCC_USER")
 
 
 def send(email, msg_html):
@@ -21,7 +22,8 @@ def send(email, msg_html):
     msg["Subject"] = "News"
     msg["From"] = EMAIL_HOST_USER
     msg["To"] = email
-    # msg['Cc'] = contacts
+    if EMAIL_HOST_USER != EMAIL_BCC_USER:
+        msg["Bcc"] = EMAIL_BCC_USER
 
     html_part = MIMEMultipart(_subtype="related")
     # <!-- to comment in html -->
