@@ -1,2 +1,4 @@
 .env
 venv
+__pycache__
+rss_feeds.json
