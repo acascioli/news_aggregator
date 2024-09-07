@@ -2,6 +2,7 @@ import json
 import os
 
 import feedparser
+import markdown
 import openai
 import requests
 from bs4 import BeautifulSoup
@@ -14,9 +15,9 @@ client = openai.OpenAI(
 )
 
 
-
-with open('../../rss_feeds.json') as f:
+with open("../../rss_feeds.json") as f:
     RSS_FEEDS = json.load(f)
+
 
 def parse_RSS():
     articles = []
@@ -29,6 +30,7 @@ def parse_RSS():
         articles, key=lambda x: x[1].published_parsed, reverse=True
     )
     return articles
+
 
 # Function to scrape the content of the news article from its URL
 def scrape_content(url):
@@ -75,3 +77,15 @@ def summarize_and_translate(text):
     # Extract the response
     output = response.choices[0].message
     return output
+
+
+def process_openai_output(result):
+    task_1 = result.content.split("###")[1].split("\n\n")[1].split("\n")
+    task_2 = result.content.split("###")[2].split("\n\n")[1].split("\n")
+    task_3 = result.content.split("###")[3].split("\n\n")[1].split("\n")
+    print(task_1)
+    task_1 = [markdown.markdown(item) for item in task_1]
+    print(task_1)
+    task_2 = [markdown.markdown(item) for item in task_2]
+    task_3 = [markdown.markdown(item) for item in task_3]
+    return task_1, task_2, task_3

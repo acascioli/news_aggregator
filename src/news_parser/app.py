@@ -1,6 +1,10 @@
-import markdown
 from flask import Flask, render_template, request
-from utils.helper import parse_RSS, scrape_content, summarize_and_translate
+from utils.helper import (
+    parse_RSS,
+    process_openai_output,
+    scrape_content,
+    summarize_and_translate,
+)
 
 app = Flask(__name__)
 
@@ -43,7 +47,6 @@ def article(article_title):
     try:
         articles = parse_RSS()
         article_title = "".join(e for e in article_title if e.isalnum())
-        current_title = "".join(e for e in articles[1][1].title if e.isalnum())
         for article in articles:
             current_title = "".join(e for e in article[1].title if e.isalnum())
             if current_title == article_title:
@@ -52,31 +55,7 @@ def article(article_title):
                     scrape_content(selected_article.link)
                 )
                 if result.content:
-                    task_1 = (
-                        result.content.split("###")[1]
-                        .split("\n\n")[1]
-                        .split("\n")
-                    )
-                    task_2 = (
-                        result.content.split("###")[2]
-                        .split("\n\n")[1]
-                        .split("\n")
-                    )
-                    task_3 = (
-                        result.content.split("###")[3]
-                        .split("\n\n")[1]
-                        .split("\n")
-                    )
-                    print(task_1)
-                    task_1 = [markdown.markdown(item) for item in task_1]
-                    print(task_1)
-                    task_2 = [markdown.markdown(item) for item in task_2]
-                    task_3 = [markdown.markdown(item) for item in task_3]
-                    # print(task_3)
-                    # if task_3[0][0] == 1:
-                    #     task_3 = [item.split(". ")[-1] for item in task_3]
-                    # else:
-                    #     task_3 = [item.replace(" - ", ": ") for item in task_3]
+                    task_1, task_2, task_3 = process_openai_output(result)
                     return render_template(
                         "article.html",
                         title=selected_article.title,

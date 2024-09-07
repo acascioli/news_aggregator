@@ -11,7 +11,7 @@ EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 
 
-def send(email):
+def send(email, msg_html):
     msg = MIMEMultipart()
     msg["Subject"] = "News"
     msg["From"] = EMAIL_HOST_USER
@@ -21,9 +21,9 @@ def send(email):
     html_part = MIMEMultipart(_subtype="related")
     # <!-- to comment in html -->
     # Lucida Handwriting
-    msg_html = """
-    <p>Test</p>
-    """
+    # msg_html = """
+    # <p>Test</p>
+    # """
 
     body = MIMEText(msg_html, _subtype="html")
     html_part.attach(body)
@@ -35,9 +35,3 @@ def send(email):
     server.login(EMAIL_HOST_USER, EMAIL_HOST_PASSWORD)
     server.send_message(msg)
     server.quit()
-
-
-try:
-    send(EMAIL_HOST_USER)
-except Exception as e:
-    print(e)
