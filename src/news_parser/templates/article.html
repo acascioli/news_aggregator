@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{{ title }}</title>
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='style.css') }}"
+        />
+    </head>
+    <body>
+        <header>
+            <h1>{{ title }}</h1>
+        </header>
+
+        <div class="articles">
+            <article>
+                <h2><a href="{{ link }}" target="_blank">{{ title }}</a></h2>
+
+                <h3>Summary in Bullet Points</h3>
+
+                {% for item in summary %} {{ item | safe }}
+                <!-- Use 'safe' to render the HTML -->
+                {% endfor %}
+
+                <h3>Translation in Italian</h3>
+
+                {% for item in translation %} {{ item | safe }}
+                <!-- Use 'safe' to render the HTML -->
+                {% endfor %}
+
+                <h3>Idioms or Slang</h3>
+                {% for item in idioms %} {{ item | safe }}
+                <!-- Use 'safe' to render the HTML -->
+                {% endfor %}
+
+                <div class="pagination">
+                    <a href="{{ url_for('index') }}">Back to Home</a>
+                </div>
+            </article>
+        </div>
+    </body>
+</html>
