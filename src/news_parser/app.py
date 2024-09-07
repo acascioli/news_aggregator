@@ -1,3 +1,5 @@
+import json
+
 from flask import Flask, render_template, request
 from utils.helper import (
     parse_RSS,
@@ -6,12 +8,15 @@ from utils.helper import (
     summarize_and_translate,
 )
 
+with open("../../rss_feeds.json") as f:
+    RSS_FEEDS = json.load(f)
+
 app = Flask(__name__)
 
 
 @app.route("/")
 def index():
-    articles = parse_RSS()
+    articles = parse_RSS(RSS_FEEDS)
     page = request.args.get("page", 1, type=int)
     per_page = 10
     total_articles = len(articles)
@@ -31,7 +36,7 @@ def index():
 def search():
     query = request.args.get("q")
 
-    articles = parse_RSS()
+    articles = parse_RSS(RSS_FEEDS)
 
     results = [
         article
@@ -45,7 +50,7 @@ def search():
 @app.route("/article/<article_title>")
 def article(article_title):
     try:
-        articles = parse_RSS()
+        articles = parse_RSS(RSS_FEEDS)
         article_title = "".join(e for e in article_title if e.isalnum())
         for article in articles:
             current_title = "".join(e for e in article[1].title if e.isalnum())

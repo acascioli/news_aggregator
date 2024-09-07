@@ -3,7 +3,12 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+import markdown
 from dotenv import load_dotenv
+from utils.helper import (
+    scrape_content,
+    summarize_and_translate,
+)
 
 load_dotenv()
 
@@ -35,3 +40,24 @@ def send(email, msg_html):
     server.login(EMAIL_HOST_USER, EMAIL_HOST_PASSWORD)
     server.send_message(msg)
     server.quit()
+
+
+def compose_email(articles, n_news):
+    first_articles = articles[:n_news]
+    msg_html = ""
+    # Loop through the selected articles and add their content to the message
+    for article in first_articles:
+        selected_article = article
+        result = summarize_and_translate(
+            scrape_content(selected_article[1].link)
+        )
+
+        # Convert the content from Markdown to HTML
+        article_html = markdown.markdown(result.content)
+
+        # Add the title and the converted HTML content to the email message
+        msg_html += f"<h2>{selected_article[1].title}</h2>"
+        msg_html += f"<h4>From: {selected_article[0]}</h4>"
+        msg_html += article_html
+        msg_html += "<hr class='solid'>"
+    return msg_html

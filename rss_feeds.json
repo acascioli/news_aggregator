@@ -1,8 +1,13 @@
 {
-  "Hacker News": "https://news.ycombinator.com/rss",
-  "BBC News - World": "https://feeds.bbci.co.uk/news/world/rss.xml",
-  "BBC News - Health": "https://feeds.bbci.co.uk/news/health/rss.xml",
-  "BBC News - Tech": "https://feeds.bbci.co.uk/news/technology/rss.xml",
-  "BBC News - Science and Environment": "https://feeds.bbci.co.uk/news/science_and_environment/rss.xml?edition=uk",
-  "Zeit": "https://newsfeed.zeit.de/index"
+  "en": {
+    "Hacker News": "https://news.ycombinator.com/rss",
+    "BBC News - World": "https://feeds.bbci.co.uk/news/world/rss.xml",
+    "BBC News - Health": "https://feeds.bbci.co.uk/news/health/rss.xml",
+    "BBC News - Tech": "https://feeds.bbci.co.uk/news/technology/rss.xml",
+    "BBC News - Science and Environment": "https://feeds.bbci.co.uk/news/science_and_environment/rss.xml?edition=uk"
+  },
+  "de": {
+    "Zeit": "https://newsfeed.zeit.de/index"
+  },
+  "email": "alo.newsletters@proton.me"
 }

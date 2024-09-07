@@ -1,4 +1,3 @@
-import json
 import os
 
 import feedparser
@@ -15,13 +14,13 @@ client = openai.OpenAI(
 )
 
 
-with open("../../rss_feeds.json") as f:
-    RSS_FEEDS = json.load(f)
-
-
-def parse_RSS():
+def parse_RSS(RSS_FEEDS, lan=None):
     articles = []
-    for source, feed in RSS_FEEDS.items():
+    if lan:
+        rss = RSS_FEEDS[lan]
+    else:
+        rss = RSS_FEEDS["en"] | RSS_FEEDS["de"]
+    for source, feed in rss.items():
         parsed_feed = feedparser.parse(feed)
         entries = [(source, entry) for entry in parsed_feed.entries]
         articles.extend(entries)
@@ -83,9 +82,7 @@ def process_openai_output(result):
     task_1 = result.content.split("###")[1].split("\n\n")[1].split("\n")
     task_2 = result.content.split("###")[2].split("\n\n")[1].split("\n")
     task_3 = result.content.split("###")[3].split("\n\n")[1].split("\n")
-    print(task_1)
     task_1 = [markdown.markdown(item) for item in task_1]
-    print(task_1)
     task_2 = [markdown.markdown(item) for item in task_2]
     task_3 = [markdown.markdown(item) for item in task_3]
     return task_1, task_2, task_3

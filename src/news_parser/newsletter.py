@@ -1,42 +1,32 @@
+import json
 import os
 
-import markdown
 from dotenv import load_dotenv
-from utils.emails import send
+from utils.emails import compose_email, send
 from utils.helper import (
     parse_RSS,
-    scrape_content,
-    summarize_and_translate,
 )
 
 load_dotenv()
 
+with open("../../rss_feeds.json") as f:
+    RSS_FEEDS = json.load(f)
+
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
-n_news = 3
+n_news = 2
 
 # Parse the RSS feed and select the first n_news articles
-articles = parse_RSS()
-first_articles = articles[:n_news]
+en_articles = parse_RSS(RSS_FEEDS, lan="en")
+de_articles = parse_RSS(RSS_FEEDS, lan="de")
 
 # Start building the email message with a greeting
-msg_html = ""
-
-# Loop through the selected articles and add their content to the message
-for article in first_articles:
-    selected_article = article
-    result = summarize_and_translate(scrape_content(selected_article[1].link))
-
-    # Convert the content from Markdown to HTML
-    article_html = markdown.markdown(result.content)
-
-    # Add the title and the converted HTML content to the email message
-    msg_html += f"<h2>{selected_article[1].title}</h2>"
-    msg_html += f"<h4>From: {selected_article[0]}</h4>"
-    msg_html += article_html
-    msg_html += "<hr class='solid'>"
+msg_html = "<h1>English</h1>"
+msg_html += compose_email(en_articles, n_news)
+msg_html += "<h1>German</h1>"
+msg_html += compose_email(de_articles, n_news)
 
 # Attempt to send the email
 try:
-    send(EMAIL_HOST_USER, msg_html)
+    send(RSS_FEEDS["email"], msg_html)
 except Exception as e:
     print(f"Failed to send email: {e}")
