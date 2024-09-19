@@ -12,7 +12,7 @@ I have included the possibility to recieve emails with the top news and their tr
 
 ## Preview
 
-![Video preview](/_demo/2024-09-07 12-29-04.mkv)
+![Video preview](_demo/2024-09-07%2012-29-04.mp4)
 
 ### Notes
 
