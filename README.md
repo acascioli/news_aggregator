@@ -10,6 +10,10 @@ I have extended the project introducing translation capabilities to learn new wo
 
 I have included the possibility to recieve emails with the top news and their translation.
 
+## Preview
+
+![Video preview](/_demo/2024-09-07 12-29-04.mkv)
+
 ### Notes
 
 To get the app psw for gmail the option was under the MFA properties
